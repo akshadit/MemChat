@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-main: #0F1117;
+    --bg-surface: #1A1D24;
+    --bg-surface-hover: #232731;
+    
+    --border-light: #2A2E39;
+    
+    --accent-primary: #6366F1;
+    --accent-hover: #4F46E5;
+    
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+  }
+  
+  body {
+    @apply text-[var(--text-primary)] font-sans antialiased;
+    background-color: var(--bg-main);
+    background-image: url('/doodle.png');
+    background-size: 400px;
+    background-repeat: repeat;
+    background-attachment: fixed;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-[#1A1D24]/80 backdrop-blur-lg border border-[#2A2E39]/50 shadow-lg shadow-black/20;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
