@@ -41,7 +41,11 @@ class GoogleAuthService extends ChangeNotifier {
     });
 
     try {
-      await _googleSignIn.signInSilently().timeout(const Duration(seconds: 1));
+      final account = await _googleSignIn.signInSilently().timeout(const Duration(seconds: 4));
+      if (account != null) {
+        _currentUser = account;
+        _authenticatedClient = await _googleSignIn.authenticatedClient();
+      }
     } catch (e) {
       debugPrint('Silent sign in error: $e');
     } finally {

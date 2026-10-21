@@ -163,6 +163,110 @@ class _ChatListScreenState extends State<ChatListScreen> {
     );
   }
 
+  void _showAccountSheet(BuildContext context) {
+    final user = GoogleAuthService.instance.currentUser;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        decoration: const BoxDecoration(
+          color: AppTheme.darkAppBar,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  width: 38,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppTheme.cardBorder,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 18),
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: AppTheme.whatsappTeal.withOpacity(0.2),
+                child: Text(
+                  user != null && user.email.isNotEmpty ? user.email[0].toUpperCase() : 'G',
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppTheme.whatsappGreen),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                user?.displayName ?? (user != null ? 'Google Drive Account' : 'Demo Mode Account'),
+                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                user?.email ?? 'Offline Demo Mode',
+                style: const TextStyle(fontSize: 13, color: AppTheme.textSecondary),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: AppTheme.inputPill,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppTheme.cardBorder),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.cloud_done_rounded, color: AppTheme.whatsappGreen, size: 22),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Personal Google Drive Active',
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                          ),
+                          Text(
+                            '${_chats.length} chat folders synced with Drive',
+                            style: const TextStyle(fontSize: 11.5, color: AppTheme.textSecondary),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+              SizedBox(
+                width: double.infinity,
+                height: 46,
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    Navigator.pop(ctx);
+                    await GoogleAuthService.instance.signOut();
+                    if (mounted) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (_) => const SplashAuthScreen()),
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.logout_rounded, color: Colors.redAccent, size: 18),
+                  label: const Text('Sign Out', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.redAccent, width: 1.2),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = GoogleAuthService.instance.currentUser;
@@ -237,43 +341,27 @@ class _ChatListScreenState extends State<ChatListScreen> {
             tooltip: 'Sync Drive',
             onPressed: _loadChats,
           ),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert_rounded, color: AppTheme.textSecondary),
-            color: AppTheme.darkAppBar,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
-              side: const BorderSide(color: AppTheme.cardBorder),
-            ),
-            onSelected: (val) async {
-              if (val == 'signout') {
-                await GoogleAuthService.instance.signOut();
-                if (mounted) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => const SplashAuthScreen()),
-                  );
-                }
-              }
-            },
-            itemBuilder: (ctx) => [
-              PopupMenuItem(
-                enabled: false,
+          // User Profile & Sign Out Button
+          GestureDetector(
+            onTap: () => _showAccountSheet(context),
+            child: Container(
+              margin: const EdgeInsets.only(right: 12, left: 4),
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF0F766E), Color(0xFF047857)],
+                ),
+                border: Border.all(color: AppTheme.whatsappGreen, width: 1.5),
+              ),
+              child: Center(
                 child: Text(
-                  user != null ? 'Signed in: ${user.email}' : 'Status: Offline Demo Mode',
-                  style: const TextStyle(fontSize: 12, color: AppTheme.textMuted),
+                  user != null && user.email.isNotEmpty ? user.email[0].toUpperCase() : 'A',
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
                 ),
               ),
-              const PopupMenuDivider(),
-              const PopupMenuItem(
-                value: 'signout',
-                child: Row(
-                  children: [
-                    Icon(Icons.logout_rounded, size: 18, color: Colors.redAccent),
-                    SizedBox(width: 8),
-                    Text('Sign Out', style: TextStyle(color: Colors.redAccent)),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),

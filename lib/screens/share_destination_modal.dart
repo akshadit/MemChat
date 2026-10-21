@@ -22,8 +22,30 @@ class ShareDestinationModal extends StatefulWidget {
 }
 
 class _ShareDestinationModalState extends State<ShareDestinationModal> {
+  List<DriveItem> _chats = [];
+  bool _isLoadingChats = false;
   bool _isUploading = false;
   String _uploadStatus = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _chats = List.from(widget.chats);
+    if (_chats.isEmpty) {
+      _loadChats();
+    }
+  }
+
+  Future<void> _loadChats() async {
+    setState(() => _isLoadingChats = true);
+    final results = await GoogleDriveService.instance.fetchChats();
+    if (mounted) {
+      setState(() {
+        _chats = results;
+        _isLoadingChats = false;
+      });
+    }
+  }
 
   Future<void> _sendToChat(DriveItem chat) async {
     setState(() {
@@ -54,6 +76,57 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
       Navigator.pop(context);
       widget.onFinished();
     }
+  }
+
+  void _showNewFolderDialog() {
+    final textCtrl = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.darkAppBar,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppTheme.cardBorder),
+        ),
+        title: const Text('Create New Chat Folder', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+        content: TextField(
+          controller: textCtrl,
+          autofocus: true,
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            hintText: 'e.g. Invoices, Family Trip',
+            hintStyle: const TextStyle(color: AppTheme.textMuted, fontSize: 13),
+            filled: true,
+            fillColor: AppTheme.inputPill,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final name = textCtrl.text.trim();
+              if (name.isNotEmpty) {
+                Navigator.pop(ctx);
+                final created = await GoogleDriveService.instance.createChatFolder(name);
+                if (created != null && mounted) {
+                  setState(() => _chats.insert(0, created));
+                  _sendToChat(created);
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.whatsappTeal,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Create & Save Here'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -117,6 +190,11 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
                     ],
                   ),
                 ),
+                IconButton(
+                  icon: const Icon(Icons.create_new_folder_outlined, color: AppTheme.whatsappTeal),
+                  tooltip: 'New Folder',
+                  onPressed: _showNewFolderDialog,
+                ),
               ],
             ),
             const SizedBox(height: 14),
@@ -149,11 +227,21 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
             ),
             const SizedBox(height: 16),
 
-            const Text(
-              'Select destination chat folder:',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textSecondary),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Select destination chat folder:',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textSecondary),
+                ),
+                TextButton(
+                  onPressed: _showNewFolderDialog,
+                  style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+                  child: const Text('+ New Folder', style: TextStyle(fontSize: 12, color: AppTheme.whatsappTeal)),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 6),
 
             if (_isUploading)
               Container(
@@ -168,6 +256,13 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
                   ),
                 ),
               )
+            else if (_isLoadingChats)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(24),
+                  child: CircularProgressIndicator(color: AppTheme.whatsappTeal),
+                ),
+              )
             else
               ConstrainedBox(
                 constraints: BoxConstraints(
@@ -175,10 +270,10 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
                 ),
                 child: ListView.separated(
                   shrinkWrap: true,
-                  itemCount: widget.chats.length,
+                  itemCount: _chats.length,
                   separatorBuilder: (ctx, i) => const Divider(height: 1, color: AppTheme.cardBorder),
                   itemBuilder: (ctx, i) {
-                    final chat = widget.chats[i];
+                    final chat = _chats[i];
                     return ListTile(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                       leading: Container(
