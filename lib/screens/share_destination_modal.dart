@@ -48,7 +48,7 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('✓ Saved ${files.length} item(s) to "${chat.name}" in Google Drive!'),
-          backgroundColor: AppTheme.whatsappGreen,
+          backgroundColor: AppTheme.whatsappTeal,
         ),
       );
       Navigator.pop(context);
@@ -62,10 +62,10 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
 
     return Container(
       decoration: const BoxDecoration(
-        color: AppTheme.darkSurface,
+        color: AppTheme.darkAppBar,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+      padding: const EdgeInsets.fromLTRB(18, 12, 18, 24),
       child: SafeArea(
         top: false,
         child: Column(
@@ -75,7 +75,7 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
             // Handle bar
             Center(
               child: Container(
-                width: 38,
+                width: 40,
                 height: 4,
                 decoration: BoxDecoration(
                   color: AppTheme.cardBorder,
@@ -83,32 +83,33 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
                 ),
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
 
             // Header
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(9),
                   decoration: BoxDecoration(
-                    color: AppTheme.whatsappGreen.withOpacity(0.15),
+                    color: AppTheme.whatsappTeal.withOpacity(0.18),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.share_rounded, color: AppTheme.whatsappGreen, size: 20),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Forwarded from WhatsApp',
+                        'Forward to Google Drive Chat',
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 16.5,
+                          fontWeight: FontWeight.w700,
                           color: AppTheme.textPrimary,
                         ),
                       ),
+                      const SizedBox(height: 2),
                       Text(
                         '${files.length} file(s) ready to organize into Google Drive',
                         style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary),
@@ -122,22 +123,25 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
 
             // File preview chip
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
-                color: AppTheme.cardElevated,
+                color: AppTheme.inputPill,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppTheme.cardBorder),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.insert_drive_file_rounded, color: AppTheme.primaryEmerald, size: 22),
-                  const SizedBox(width: 8),
+                  const Icon(Icons.insert_drive_file_rounded, color: AppTheme.whatsappTeal, size: 20),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       files.map((f) => f.path.split(Platform.pathSeparator).last).join(', '),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 13, color: AppTheme.textPrimary),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: AppTheme.textPrimary,
+                      ),
                     ),
                   ),
                 ],
@@ -146,7 +150,7 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
             const SizedBox(height: 16),
 
             const Text(
-              'Select which chat to send this to:',
+              'Select destination chat folder:',
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textSecondary),
             ),
             const SizedBox(height: 10),
@@ -157,7 +161,7 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
                 child: Center(
                   child: Column(
                     children: [
-                      const CircularProgressIndicator(color: AppTheme.whatsappGreen),
+                      const CircularProgressIndicator(color: AppTheme.whatsappTeal),
                       const SizedBox(height: 14),
                       Text(_uploadStatus, style: const TextStyle(color: AppTheme.textPrimary)),
                     ],
@@ -176,16 +180,22 @@ class _ShareDestinationModalState extends State<ShareDestinationModal> {
                   itemBuilder: (ctx, i) {
                     final chat = widget.chats[i];
                     return ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      leading: CircleAvatar(
-                        backgroundColor: AppTheme.cardElevated,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                      leading: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: AppTheme.cardElevated,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppTheme.cardBorder),
+                        ),
                         child: const Icon(Icons.folder_rounded, color: AppTheme.whatsappGreen, size: 20),
                       ),
                       title: Text(
                         chat.name,
                         style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
                       ),
-                      trailing: const Icon(Icons.send_rounded, color: AppTheme.whatsappGreen, size: 18),
+                      trailing: const Icon(Icons.send_rounded, color: AppTheme.whatsappTeal, size: 18),
                       onTap: () => _sendToChat(chat),
                     );
                   },

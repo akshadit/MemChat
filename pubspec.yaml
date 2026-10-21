@@ -38,7 +38,7 @@ dependencies:
   googleapis: ^13.2.0
   googleapis_auth: ^1.4.1
   extension_google_sign_in_as_googleapis_auth: ^2.0.12
-  receive_sharing_intent: ^1.9.0
+  receive_sharing_intent: 1.8.1
   flutter_riverpod: ^2.6.1
   cached_network_image: ^3.4.1
   open_filex: ^5.0.0
