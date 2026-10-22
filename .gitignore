@@ -44,9 +44,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Binaries & APKs (Exceeds GitHub 100MB limit)
+# Binaries & APKs (Default ignore, except website release APK)
 *.apk
 *.aab
-website/app/*.apk
+!website/app/memchat.apk
 !website/app/.gitkeep
 
