@@ -1,15 +1,13 @@
 /**
  * MemChat Tester Hub — Frontend Logic
  * Sends registration to Google Sheets webhook and dispatches email alert to developer.
+ * Includes Thank You Popup from Akshayaditya K R and celebratory confetti.
  */
 
 // ============================================================================
-// CONFIGURATION
+// CONFIGURATION (DO NOT MODIFY UNLESS DEPLOYING NEW WEBHOOK)
 // ============================================================================
-// 1. Paste your deployed Google Apps Script Web App URL below:
 const GOOGLE_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwJdOlR-2Us1zgSb-UJfZuVqywFNNHJvDzd8_IdNBCux073VF1w3Hx3nJYgIw7_SUKd/exec';
-
-// 2. Your email address for direct alerts (used as instant notification fallback):
 const DEVELOPER_EMAIL = 'akshayaditya1976@gmail.com';
 // ============================================================================
 
@@ -19,6 +17,8 @@ function switchHubTab(tab) {
   const tabDownload = document.getElementById('tabDownload');
   const viewRegister = document.getElementById('hubRegisterView');
   const viewDownload = document.getElementById('hubDownloadView');
+
+  if (!tabRegister || !tabDownload || !viewRegister || !viewDownload) return;
 
   if (tab === 'register') {
     tabRegister.classList.add('active');
@@ -83,11 +83,10 @@ async function handleTesterSubmit(e) {
 
   const promises = [];
 
-  // 1. Send to Google Sheets Webhook (if URL configured)
-  const webhookUrl = GOOGLE_SHEET_WEBHOOK_URL || localStorage.getItem('memchat_google_sheet_webhook');
-  if (webhookUrl) {
+  // 1. Send to Google Sheets Webhook
+  if (GOOGLE_SHEET_WEBHOOK_URL) {
     promises.push(
-      fetch(webhookUrl, {
+      fetch(GOOGLE_SHEET_WEBHOOK_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
@@ -110,7 +109,7 @@ async function handleTesterSubmit(e) {
     );
   }
 
-  // Wait max 1.5 seconds for network requests so tester is never kept waiting
+  // Wait max 1.5 seconds so tester is never blocked
   await Promise.race([
     Promise.allSettled(promises),
     new Promise(resolve => setTimeout(resolve, 1500))
@@ -134,5 +133,111 @@ async function handleTesterSubmit(e) {
     if (card) {
       card.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, 900);
+  }, 800);
+}
+
+// APK Download Handler & Thank You Modal Trigger
+function handleApkDownload(e) {
+  // Let the native browser download proceed naturally via the href/download attribute
+  setTimeout(() => {
+    openThankYouModal();
+  }, 400);
+}
+
+function openThankYouModal() {
+  const modal = document.getElementById('thankYouModal');
+  if (modal) {
+    modal.style.display = 'flex';
+    fireConfetti();
+  }
+}
+
+function closeThankYouModal() {
+  const modal = document.getElementById('thankYouModal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+// Close modal when clicking outside of the card
+window.addEventListener('click', (e) => {
+  const modal = document.getElementById('thankYouModal');
+  if (e.target === modal) {
+    closeThankYouModal();
+  }
+});
+
+// ESC key to close modal
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeThankYouModal();
+  }
+});
+
+// Celebratory Confetti System
+function fireConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors = ['#00F298', '#00A884', '#25D366', '#38BDF8', '#F59E0B', '#FFFFFF'];
+  const confettiCount = 80;
+  const confetti = [];
+
+  for (let i = 0; i < confettiCount; i++) {
+    confetti.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height * 0.4 - canvas.height * 0.2,
+      w: Math.random() * 8 + 5,
+      h: Math.random() * 6 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vy: Math.random() * 3 + 2,
+      vx: (Math.random() - 0.5) * 3,
+      rotation: Math.random() * 360,
+      vRot: (Math.random() - 0.5) * 8,
+      opacity: 1
+    });
+  }
+
+  let animationFrame;
+  let startTime = Date.now();
+
+  function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const elapsed = Date.now() - startTime;
+
+    let activeParticles = 0;
+    confetti.forEach(p => {
+      p.y += p.vy;
+      p.x += p.vx;
+      p.rotation += p.vRot;
+
+      if (elapsed > 2000) {
+        p.opacity = Math.max(0, p.opacity - 0.02);
+      }
+
+      if (p.opacity > 0 && p.y < canvas.height + 20) {
+        activeParticles++;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.opacity;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      }
+    });
+
+    if (activeParticles > 0 && elapsed < 4500) {
+      animationFrame = requestAnimationFrame(render);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      cancelAnimationFrame(animationFrame);
+    }
+  }
+
+  render();
 }

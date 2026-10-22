@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MemChat — Your Google Drive, Reimagined as WhatsApp Chats</title>
-  <meta name="description" content="Turn your Google Drive folders into familiar WhatsApp chats. Zero server storage, 100% private, native WhatsApp forward integration. Download the private beta APK.">
+  <title>MemChat — Your Google Drive, Familiar as WhatsApp</title>
+  <meta name="description" content="Turn your Google Drive folders into familiar WhatsApp chats. Zero cloud servers, 100% private, native WhatsApp forward integration. Download the private beta APK.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <!-- Ambient Glow Effects -->
   <div class="ambient-glow glow-top"></div>
   <div class="ambient-glow glow-bottom"></div>
@@ -18,16 +19,16 @@
   <!-- Navigation -->
   <header class="navbar">
     <div class="container nav-content">
-      <div class="brand">
+      <a href="#" class="brand">
         <div class="brand-logo">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 2C6.477 2 2 6.142 2 11.25c0 2.613 1.18 4.978 3.094 6.643L4 22l4.406-1.455c1.11.45 2.321.705 3.594.705 5.523 0 10-4.142 10-9.25S17.523 2 12 2z" fill="#00A884"/>
-            <path d="M8.5 12h7M8.5 9h5M8.5 15h4" stroke="#0B141A" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M8.5 12h7M8.5 9h5M8.5 15h4" stroke="#070B0E" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </div>
         <span class="brand-name">MemChat</span>
-        <span class="badge-beta">Beta</span>
-      </div>
+        <span class="badge-beta">Private Beta</span>
+      </a>
 
       <nav class="nav-links">
         <a href="#features">Features</a>
@@ -43,14 +44,14 @@
       <div class="hero-text">
         <div class="hero-pill">
           <span class="pill-dot"></span>
-          <span>Private Android Beta • v1.0.0 Now Available</span>
+          <span>Android Beta • Release v1.0.0 Now Live</span>
         </div>
         <h1 class="hero-title">
           Your Google Drive, <br>
-          <span class="gradient-text">Reimagined as WhatsApp Chats.</span>
+          <span class="gradient-text">Familiar as WhatsApp.</span>
         </h1>
         <p class="hero-subtitle">
-          No confusing nested folder mazes. MemChat turns your Google Drive folders into familiar chat rooms and your files into chat bubbles. Zero cloud servers. 100% private.
+          No confusing nested folder mazes. MemChat reimagines your Google Drive as familiar WhatsApp chats and files as chat bubbles. Zero third-party servers. 100% private to your device.
         </p>
 
         <div class="hero-actions">
@@ -66,15 +67,15 @@
 
         <div class="trust-points">
           <div class="trust-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="#00A884"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <span>Direct Google Drive API</span>
           </div>
           <div class="trust-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="#00A884"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span>WhatsApp Forward Friendly</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Native WhatsApp Share Forward</span>
           </div>
           <div class="trust-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="#00A884"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             <span>Zero Middleman Storage</span>
           </div>
         </div>
@@ -91,82 +92,94 @@
             <div class="app-header">
               <div class="app-title-row">
                 <span class="app-logo-text">MemChat</span>
-                <span class="app-drive-chip">Drive</span>
+                <span class="app-drive-chip">● Drive Synced</span>
               </div>
               <div class="app-icons">
-                <span class="icon-circle">🔍</span>
-                <span class="icon-avatar">A</span>
+                <span class="icon-circle">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </span>
+                <span class="icon-avatar">AK</span>
               </div>
             </div>
 
             <!-- WhatsApp Style Tabs -->
             <div class="app-filter-tabs">
-              <span class="filter-tab active">All</span>
-              <span class="filter-tab">Documents</span>
-              <span class="filter-tab">Photos</span>
+              <span class="filter-tab active">All Folders</span>
+              <span class="filter-tab">Docs</span>
+              <span class="filter-tab">Memos</span>
             </div>
 
             <!-- Chat Items Feed -->
             <div class="app-chat-list">
               <div class="chat-row">
-                <div class="avatar-folder teal-grad">📁</div>
+                <div class="avatar-folder teal-grad">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
                 <div class="chat-details">
                   <div class="chat-top">
-                    <span class="chat-name">Medical Records & Scans</span>
-                    <span class="chat-time">Today</span>
+                    <span class="chat-name">Medical Bills & Lab Reports</span>
+                    <span class="chat-time">10:42 AM</span>
                   </div>
                   <div class="chat-sub">
                     <span class="tick-blue">✓✓</span>
-                    <span>Blood_Report_2026.pdf (1.2 MB)</span>
+                    <span>Blood_Report_2026.pdf (1.4 MB)</span>
                   </div>
                 </div>
               </div>
 
               <div class="chat-row">
-                <div class="avatar-folder blue-grad">📁</div>
+                <div class="avatar-folder blue-grad">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0M2 9.5h20"/></svg>
+                </div>
                 <div class="chat-details">
                   <div class="chat-top">
-                    <span class="chat-name">Tax & Receipts 2024</span>
+                    <span class="chat-name">Tax & Work Receipts 2024</span>
+                    <span class="chat-time">Yesterday</span>
+                  </div>
+                  <div class="chat-sub">
+                    <span class="tick-blue">✓✓</span>
+                    <span>Q3_Freelance_Invoice.pdf</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chat-row">
+                <div class="avatar-folder purple-grad">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <div class="chat-details">
+                  <div class="chat-top">
+                    <span class="chat-name">House Documents & Deeds</span>
                     <span class="chat-time">Oct 20</span>
                   </div>
                   <div class="chat-sub">
                     <span class="tick-blue">✓✓</span>
-                    <span>House_Tax_Receipt.jpg</span>
+                    <span>Registry_Agreement_Scan.pdf</span>
                   </div>
                 </div>
               </div>
 
               <div class="chat-row">
-                <div class="avatar-folder purple-grad">📁</div>
-                <div class="chat-details">
-                  <div class="chat-top">
-                    <span class="chat-name">House Renovation</span>
-                    <span class="chat-time">Oct 18</span>
-                  </div>
-                  <div class="chat-sub">
-                    <span class="tick-blue">✓✓</span>
-                    <span>Kitchen_Design_Final.pdf</span>
-                  </div>
+                <div class="avatar-folder orange-grad">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
                 </div>
-              </div>
-
-              <div class="chat-row">
-                <div class="avatar-folder orange-grad">📁</div>
                 <div class="chat-details">
                   <div class="chat-top">
-                    <span class="chat-name">Family Memories</span>
-                    <span class="chat-time">Oct 12</span>
+                    <span class="chat-name">Family Voice Notes</span>
+                    <span class="chat-time">Oct 16</span>
                   </div>
                   <div class="chat-sub">
                     <span class="tick-blue">✓✓</span>
-                    <span>Voice Note (0:42)</span>
+                    <span>Mom_Recipe_Memo.m4a (0:52)</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Floating WhatsApp Button -->
-            <div class="app-fab">💬</div>
+            <!-- Floating Action Button -->
+            <div class="app-fab">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
           </div>
         </div>
       </div>
@@ -177,34 +190,34 @@
   <section id="features" class="features-section">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Why MemChat?</span>
+        <span class="section-tag">Human-Centric Architecture</span>
         <h2 class="section-title">Built for Real People, Not Cloud Engineers</h2>
-        <p class="section-desc">Most people give up on Google Drive because of confusing folder trees. MemChat solves this with a mental model everyone already uses every day.</p>
+        <p class="section-desc">Traditional cloud storage assumes everyone understands hierarchical directory paths. MemChat replaces confusing nested folders with a mental model you already use every day.</p>
       </div>
 
       <div class="feature-cards">
         <div class="feature-card">
-          <div class="card-icon" style="--accent: #00A884">
+          <div class="card-icon">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
           </div>
           <h3>Folders as Chat Rooms</h3>
-          <p>Every Google Drive folder is represented as a WhatsApp chat. Open a chat to see all your documents, photos, audio memos, and notes organized chronologically.</p>
+          <p>Every Google Drive folder behaves like a WhatsApp conversation. Open a chat to see all your documents, photos, audio memos, and notes organized chronologically.</p>
         </div>
 
         <div class="feature-card">
-          <div class="card-icon" style="--accent: #25D366">
+          <div class="card-icon">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
           </div>
-          <h3>WhatsApp Share Integration</h3>
-          <p>Whenever someone forwards you a prescription, tax document, or bill on WhatsApp, just tap <strong>Share > MemChat</strong> to save it directly into the right Drive folder.</p>
+          <h3>Native WhatsApp Forwarding</h3>
+          <p>Whenever someone forwards you a prescription, tax document, or receipt on WhatsApp, simply tap <strong>Share > MemChat</strong> to file it directly into the right Drive folder without leaving chat.</p>
         </div>
 
         <div class="feature-card">
-          <div class="card-icon" style="--accent: #53BDEB">
+          <div class="card-icon">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           </div>
           <h3>Zero Server & 100% Private</h3>
-          <p>MemChat connects directly from your phone to Google's official Drive API. No third-party servers, no middleman databases, and no monthly storage fees.</p>
+          <p>MemChat connects directly from your phone to Google's official Drive REST API. No intermediate backend, no third-party database, and zero monthly subscriptions.</p>
         </div>
       </div>
     </div>
@@ -214,27 +227,27 @@
   <section id="how-it-works" class="how-section">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Simple Setup</span>
-        <h2 class="section-title">How To Become a Beta Tester</h2>
+        <span class="section-tag">Simple 3-Step Setup</span>
+        <h2 class="section-title">How To Join the Beta Program</h2>
       </div>
 
       <div class="steps-grid">
         <div class="step-card">
           <div class="step-num">01</div>
           <h4>Register Your Gmail</h4>
-          <p>Submit your Gmail address in the form below so we can whitelist your account on Google Cloud Console's approved tester list.</p>
+          <p>Submit your Gmail address in the form below so your account can be whitelisted on Google Cloud Console's OAuth Test Users list.</p>
         </div>
 
         <div class="step-card">
           <div class="step-num">02</div>
-          <h4>Download & Install APK</h4>
-          <p>Download the lightweight <code>memchat.apk</code> installer directly to your Android device and allow install from browser.</p>
+          <h4>Download Official APK</h4>
+          <p>Grab the lightweight <code>MemChat.apk</code> installer directly to your Android phone and approve installation from your browser.</p>
         </div>
 
         <div class="step-card">
           <div class="step-num">03</div>
           <h4>Sign In with Google</h4>
-          <p>Open MemChat, tap "Continue with Google", and watch your Drive folders magically appear as sleek WhatsApp conversations.</p>
+          <p>Launch MemChat, tap "Continue with Google", and watch your Drive folders magically appear as sleek WhatsApp conversations.</p>
         </div>
       </div>
     </div>
@@ -261,7 +274,7 @@
         <div id="hubRegisterView" class="hub-body">
           <div class="form-intro">
             <h3>Join the Private Tester Group</h3>
-            <p>Because Google Drive permissions are strictly protected, your Gmail must be approved by the developer before you can sign in to the app.</p>
+            <p>Because Google Drive permissions are strictly protected, your Gmail must be registered before you can sign in to the app.</p>
           </div>
 
           <form id="testerForm" class="tester-form" onsubmit="handleTesterSubmit(event)">
@@ -272,7 +285,7 @@
               </div>
 
               <div class="form-group">
-                <label for="testerEmail">Gmail Address <span class="required-badge">Required for Google Login</span></label>
+                <label for="testerEmail">Gmail Address <span class="required-badge">Required for Google OAuth</span></label>
                 <input type="email" id="testerEmail" placeholder="your.name@gmail.com" required>
               </div>
             </div>
@@ -295,7 +308,7 @@
             </div>
 
             <button type="submit" id="submitTesterBtn" class="btn btn-lg btn-primary btn-block">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
               <span>Submit Registration & Unlock APK Download</span>
             </button>
           </form>
@@ -303,8 +316,8 @@
           <div id="submitSuccessToast" class="submit-success" style="display: none;">
             <div class="success-icon">✓</div>
             <div class="success-text">
-              <h4>You're Registered!</h4>
-              <p>Your Gmail (<strong id="registeredEmailDisplay"></strong>) has been recorded. You can now download the installer below!</p>
+              <h4>Registration Received!</h4>
+              <p>Your Gmail (<strong id="registeredEmailDisplay"></strong>) has been logged. You can now download the installer below!</p>
             </div>
             <button class="btn btn-sm btn-primary" onclick="switchHubTab('download')">Proceed to Download →</button>
           </div>
@@ -315,7 +328,7 @@
           <div class="download-container">
             <div class="apk-card">
               <div class="apk-icon">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00A884" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00F298" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
               </div>
               <div class="apk-info">
                 <div class="apk-badge">Official Release Build</div>
@@ -323,7 +336,7 @@
                 <p>Package: <code>com.memchat.memchat</code> • Version: <code>v1.0.0-beta</code> • Size: <code>50.1 MB</code></p>
               </div>
               <div class="apk-action">
-                <a href="app/memchat.apk" download="MemChat.apk" class="btn btn-lg btn-download" id="directDownloadBtn">
+                <a href="app/memchat.apk" download="MemChat.apk" class="btn btn-lg btn-download" id="directDownloadBtn" onclick="handleApkDownload(event)">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                   <span>Download MemChat APK</span>
                 </a>
@@ -332,10 +345,13 @@
 
             <!-- Install Instructions -->
             <div class="install-guide">
-              <h4>Android Installation Quick Guide:</h4>
+              <h4>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00F298" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Android Installation Quick Guide:
+              </h4>
               <ol>
                 <li>Tap <strong>Download MemChat APK</strong> above.</li>
-                <li>When Chrome/Android warns: <em>"File might be harmful"</em>, tap <strong>Download anyway</strong> (standard warning for direct APK downloads).</li>
+                <li>When Chrome or Android warns: <em>"File might be harmful"</em>, tap <strong>Download anyway</strong> (standard warning for direct APK downloads outside Play Store).</li>
                 <li>Open the downloaded file and tap <strong>Install</strong>. If prompted, toggle <strong>Allow from this source</strong>.</li>
                 <li>Launch MemChat and sign in with your registered Gmail!</li>
               </ol>
@@ -346,6 +362,48 @@
     </div>
   </section>
 
+  <!-- PERSONAL THANK YOU MODAL (From Akshayaditya K R) -->
+  <div id="thankYouModal" class="modal-overlay" style="display: none;">
+    <div class="thank-you-card">
+      <button class="btn-modal-close" onclick="closeThankYouModal()" title="Close">✕</button>
+      
+      <div class="dev-avatar-wrap">
+        <div class="dev-avatar">AK</div>
+        <div class="dev-verified-badge">✓</div>
+      </div>
+
+      <h3 class="thank-you-title">You're in the Private Beta!</h3>
+      <div class="thank-you-subtitle">A Personal Note from Akshayaditya K R</div>
+
+      <div class="dev-message-box">
+        <p>Hey there! Thank you so much for downloading and testing MemChat.</p>
+        <p>I built MemChat to solve the constant struggle of organizing Google Drive folders by making them as natural, fast, and familiar as a WhatsApp chat.</p>
+        <p>Your Gmail has been submitted for Google Cloud OAuth testing access. While the APK downloads, feel free to drop any questions, bug reports, or feature ideas directly to my inbox.</p>
+        
+        <div class="dev-signature">
+          <div>
+            <div class="dev-name">Akshayaditya K R</div>
+            <div class="dev-title">Creator & Indie Developer</div>
+          </div>
+          <span style="font-size: 1.25rem;">✨</span>
+        </div>
+      </div>
+
+      <div class="thank-you-actions">
+        <a href="mailto:akshayaditya1976@gmail.com?subject=MemChat Beta Feedback from Tester" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Send Feedback to Akshayaditya
+        </a>
+        <button class="btn btn-ghost" onclick="closeThankYouModal()">
+          Continue Testing
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="container footer-content">
@@ -354,7 +412,7 @@
         <p>Private beta testing program. Files stored exclusively in personal Google Drive.</p>
       </div>
       <div class="footer-copy">
-        <p>© 2026 MemChat. 100% Client-Side Architecture.</p>
+        <p>© 2026 MemChat. Crafted with care by Akshayaditya K R.</p>
       </div>
     </div>
   </footer>
