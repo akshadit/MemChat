@@ -6,17 +6,20 @@
  * 2. Rename the Sheet title to "MemChat Beta Testers"
  * 3. In the top menu, go to: Extensions > Apps Script
  * 4. Delete any code in the editor and paste this entire script
- * 5. Update ADMIN_EMAIL below with your Gmail
+ * 5. Update ADMIN_EMAIL below with any email where you want alerts delivered!
  * 6. Click "Deploy" > "New deployment"
  * 7. Click the gear icon > Select "Web app"
  * 8. Set Description: "MemChat Webhook"
  * 9. Set "Execute as": "Me (your email)"
  * 10. Set "Who has access": "Anyone" (allows the website to POST registrations)
  * 11. Click "Deploy", authorize permissions, and copy the "Web app URL"
- * 12. Paste the Web app URL in your MemChat Admin Dashboard!
+ * 12. Paste the Web app URL into `website/script.js` as GOOGLE_SHEET_WEBHOOK_URL
  */
 
-const ADMIN_EMAIL = "akshayaditya1976@gmail.com";
+// You can change this to ANY email address! 
+// When deployed, Google sends the notification email through your Gmail account directly to this address.
+const ADMIN_EMAIL = "akshayaditya1976@gmail.com"; 
+
 const NOTIFY_VIA_EMAIL = true;
 
 function doPost(e) {
@@ -37,8 +40,8 @@ function doPost(e) {
 
     const name = data.name || "Anonymous";
     const email = (data.email || "").trim().toLowerCase();
-    const device = data.device || "Unknown Device";
-    const role = data.role || "General Testing";
+    const device = data.device || "Android Device";
+    const role = data.role || data.use_case || "Personal & Family Files";
     const timestamp = data.timestamp || new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
     const status = "Pending Google Cloud";
 
@@ -51,11 +54,11 @@ function doPost(e) {
 
     const sheet = getOrCreateSheet();
     
-    // Check if email already exists
+    // Check if email already exists in column D (index 3)
     const values = sheet.getDataRange().getValues();
     let alreadyExists = false;
     for (let i = 1; i < values.length; i++) {
-      if (values[i][2] && values[i][2].toString().toLowerCase() === email) {
+      if (values[i][3] && values[i][3].toString().toLowerCase() === email) {
         alreadyExists = true;
         break;
       }
@@ -65,7 +68,7 @@ function doPost(e) {
       const nextId = values.length; // Row index as ID
       sheet.appendRow([nextId, timestamp, name, email, device, role, status]);
 
-      // Send instant email notification to Developer
+      // Send instant email notification
       if (NOTIFY_VIA_EMAIL && ADMIN_EMAIL) {
         sendNotificationEmail(name, email, device, role, timestamp);
       }
@@ -144,7 +147,7 @@ function getOrCreateSheet() {
 function sendNotificationEmail(name, email, device, role, timestamp) {
   const subject = `🚀 [MemChat Beta] New Tester Registration: ${email}`;
   const body = 
-    `Hello Akshay,\n\n` +
+    `Hello,\n\n` +
     `A new tester has just registered for the MemChat Private Beta:\n\n` +
     `• Name: ${name}\n` +
     `• Gmail: ${email}\n` +
@@ -154,7 +157,7 @@ function sendNotificationEmail(name, email, device, role, timestamp) {
     `IMPORTANT NEXT STEP:\n` +
     `Copy this Gmail (${email}) and add it to your Google Cloud Console:\n` +
     `APIs & Services > OAuth Consent Screen > Test Users.\n\n` +
-    `View all testers directly in your Google Sheet or the MemChat Admin Portal.\n\n` +
+    `You can view all registered testers directly inside your Google Sheet.\n\n` +
     `— MemChat Notification Bot`;
 
   MailApp.sendEmail(ADMIN_EMAIL, subject, body);
