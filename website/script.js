@@ -1,10 +1,12 @@
 /**
- * MemChat Tester Hub — Logic & State Management
+ * MemChat Tester Hub — Frontend Logic & Serverless Dispatch
  */
 
 const STORAGE_KEY = 'memchat_beta_testers';
+const WEBHOOK_KEY = 'memchat_google_sheet_webhook';
+const DEVELOPER_EMAIL = 'akshayaditya1976@gmail.com';
 
-// Initialize with default developer account if empty
+// Initialize default developer account if empty
 function getStoredTesters() {
   const data = localStorage.getItem(STORAGE_KEY);
   if (!data) {
@@ -12,10 +14,11 @@ function getStoredTesters() {
       {
         id: '1',
         name: 'Akshay Aditya (Developer)',
-        email: 'akshayaditya1976@gmail.com',
+        email: DEVELOPER_EMAIL,
         device: 'Xiaomi / POCO (Android 16)',
         role: 'Personal & Family Files',
-        timestamp: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        timestamp: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        status: 'Approved in Cloud'
       }
     ];
     localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
@@ -30,15 +33,6 @@ function getStoredTesters() {
 
 function saveTesters(testers) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(testers));
-  updateTesterCount();
-}
-
-function updateTesterCount() {
-  const testers = getStoredTesters();
-  const countBadge = document.getElementById('testerCountBadge');
-  if (countBadge) {
-    countBadge.textContent = `Testers (${testers.length})`;
-  }
 }
 
 // Hub Tab Switching
@@ -61,14 +55,15 @@ function switchHubTab(tab) {
   }
 }
 
-// Form Submission
-function handleTesterSubmit(e) {
+// Form Submission with Instant Email Alert & Cloud Webhook
+async function handleTesterSubmit(e) {
   e.preventDefault();
 
   const name = document.getElementById('testerName').value.trim();
   const email = document.getElementById('testerEmail').value.trim().toLowerCase();
   const device = document.getElementById('testerDevice').value.trim() || 'Android Device';
   const role = document.getElementById('testerRole').value;
+  const submitBtn = document.getElementById('submitTesterBtn') || e.target.querySelector('button[type="submit"]');
 
   if (!email.includes('@')) {
     alert('Please enter a valid Gmail address.');
@@ -80,12 +75,21 @@ function handleTesterSubmit(e) {
   // Check if already registered
   const existing = testers.find(t => t.email === email);
   if (existing) {
-    alert(`This Gmail (${email}) is already registered! Proceeding to download.`);
     document.getElementById('registeredEmailDisplay').textContent = email;
     document.getElementById('submitSuccessToast').style.display = 'flex';
     document.getElementById('testerForm').style.display = 'none';
+    switchHubTab('download');
     return;
   }
+
+  const timestamp = new Date().toLocaleString('en-US', { 
+    timeZone: 'Asia/Kolkata',
+    month: 'short', 
+    day: 'numeric', 
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 
   const newTester = {
     id: Date.now().toString(),
@@ -93,128 +97,92 @@ function handleTesterSubmit(e) {
     email,
     device,
     role,
-    timestamp: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    timestamp,
+    status: 'Pending Google Cloud'
   };
 
+  // UI Loading State
+  const originalBtnContent = submitBtn ? submitBtn.innerHTML : '';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="spin">
+        <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+        <path d="M12 2a10 10 0 0 1 10 10"/>
+      </svg>
+      <span>Submitting & Notifying Developer...</span>
+    `;
+  }
+
+  // 1. Prepare Email Payload for Developer (FormSubmit AJAX)
+  const emailPayload = {
+    name: name,
+    email: email,
+    device: device,
+    use_case: role,
+    registered_at: timestamp,
+    _subject: `🚀 [MemChat Beta] New Tester Registration: ${email}`,
+    _template: 'table',
+    _captcha: 'false'
+  };
+
+  // Dispatch Email Notification in background
+  const emailPromise = fetch(`https://formsubmit.co/ajax/${DEVELOPER_EMAIL}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(emailPayload)
+  }).catch(err => {
+    console.warn('FormSubmit email alert caught:', err);
+  });
+
+  // 2. Dispatch to Google Sheets Webhook (if developer configured it)
+  const webhookUrl = localStorage.getItem(WEBHOOK_KEY);
+  if (webhookUrl) {
+    fetch(webhookUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newTester)
+    }).catch(err => console.warn('Google Sheet webhook caught:', err));
+  }
+
+  // 3. Save locally in client storage
   testers.unshift(newTester);
   saveTesters(testers);
 
-  // Show success and transition
+  // Wait max 1.8 seconds for email dispatch to complete so user experience is snappy
+  await Promise.race([
+    emailPromise,
+    new Promise(resolve => setTimeout(resolve, 1800))
+  ]);
+
+  // Restore button state & show success toast
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnContent;
+  }
+
   document.getElementById('registeredEmailDisplay').textContent = email;
   document.getElementById('submitSuccessToast').style.display = 'flex';
   document.getElementById('testerForm').style.display = 'none';
+
+  // Automatically switch to download tab after brief delay
+  setTimeout(() => {
+    switchHubTab('download');
+    // Scroll smoothly to download card
+    const card = document.querySelector('.apk-card');
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 1000);
 }
 
-// Admin Modal
-function openAdminModal() {
-  renderTestersTable();
-  document.getElementById('adminModal').style.display = 'flex';
-}
-
-function closeAdminModal() {
-  document.getElementById('adminModal').style.display = 'none';
-}
-
-function renderTestersTable() {
-  const testers = getStoredTesters();
-  const tbody = document.getElementById('testersTableBody');
-  const noTesters = document.getElementById('noTestersNotice');
-
-  tbody.innerHTML = '';
-
-  if (testers.length === 0) {
-    noTesters.style.display = 'block';
-    return;
-  }
-
-  noTesters.style.display = 'none';
-
-  testers.forEach((t) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><strong>${escapeHtml(t.name)}</strong></td>
-      <td><code style="color: #25D366">${escapeHtml(t.email)}</code></td>
-      <td>${escapeHtml(t.device)}</td>
-      <td>${escapeHtml(t.role)}</td>
-      <td>${escapeHtml(t.timestamp)}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function copyAllEmails() {
-  const testers = getStoredTesters();
-  if (testers.length === 0) {
-    alert('No tester emails to copy.');
-    return;
-  }
-
-  const emails = testers.map(t => t.email).join(', ');
-  navigator.clipboard.writeText(emails).then(() => {
-    const btn = document.getElementById('copyAllEmailsBtn');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '✓ Copied to Clipboard!';
-    btn.style.backgroundColor = '#25D366';
-    setTimeout(() => {
-      btn.innerHTML = originalText;
-      btn.style.backgroundColor = '';
-    }, 2500);
-  }).catch(() => {
-    prompt('Copy these emails:', emails);
-  });
-}
-
-function exportTestersCSV() {
-  const testers = getStoredTesters();
-  if (testers.length === 0) {
-    alert('No testers to export.');
-    return;
-  }
-
-  let csv = 'Name,Gmail,Device,Use Case,Registration Date\n';
-  testers.forEach(t => {
-    csv += `"${t.name}","${t.email}","${t.device}","${t.role}","${t.timestamp}"\n`;
-  });
-
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `memchat_beta_testers_${new Date().toISOString().slice(0, 10)}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function clearTestersList() {
-  if (confirm('Are you sure you want to clear all registered testers?')) {
-    localStorage.removeItem(STORAGE_KEY);
-    updateTesterCount();
-    renderTestersTable();
-  }
-}
-
+// Utility Escaper
 function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text || '';
   return div.innerHTML;
 }
-
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-  updateTesterCount();
-
-  const adminBtn = document.getElementById('adminToggleBtn');
-  if (adminBtn) {
-    adminBtn.addEventListener('click', openAdminModal);
-  }
-
-  // Close modal when clicking outside
-  const modal = document.getElementById('adminModal');
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        closeAdminModal();
-      }
-    });
-  }
-});
