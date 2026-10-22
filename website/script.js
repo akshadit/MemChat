@@ -7,7 +7,7 @@
 // CONFIGURATION
 // ============================================================================
 // 1. Paste your deployed Google Apps Script Web App URL below:
-const GOOGLE_SHEET_WEBHOOK_URL = '';
+const GOOGLE_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwJdOlR-2Us1zgSb-UJfZuVqywFNNHJvDzd8_IdNBCux073VF1w3Hx3nJYgIw7_SUKd/exec';
 
 // 2. Your email address for direct alerts (used as instant notification fallback):
 const DEVELOPER_EMAIL = 'akshayaditya1976@gmail.com';
@@ -48,10 +48,10 @@ async function handleTesterSubmit(e) {
     return;
   }
 
-  const timestamp = new Date().toLocaleString('en-US', { 
+  const timestamp = new Date().toLocaleString('en-US', {
     timeZone: 'Asia/Kolkata',
-    month: 'short', 
-    day: 'numeric', 
+    month: 'short',
+    day: 'numeric',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
